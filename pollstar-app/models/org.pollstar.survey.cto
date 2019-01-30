@@ -33,3 +33,13 @@ transaction createSurvey {
 event surveyCreated {
   o String surveyId
 }
+
+transaction assignSurvey{
+  o String surveyId
+  o String participantId
+}
+
+event surveyAssigned{
+  o String surveyId
+  o String participantId
+}
