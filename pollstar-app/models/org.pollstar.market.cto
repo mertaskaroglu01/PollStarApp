@@ -1,0 +1,12 @@
+namespace org.pollstar.market
+
+asset Market identified by marketId {
+  o String marketId
+  o Item [] items
+}
+
+concept Item {
+  o String name
+  o Integer price
+  o String [] owners
+}
