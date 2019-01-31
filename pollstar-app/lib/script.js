@@ -22,23 +22,26 @@
 
         var  NS =  'org.pollstar.survey';
 
-        var  surveyId = generateSurveyId();
+        var  surveyId = surveyData.foundationId + surveyData.surveyNum;
+
         var survey = factory.newResource(NS,'Survey',surveyId);
         survey.numOfQuestion = surveyData.numOfQuestion;
         survey.voterIds = [];
-        var question = factory.newConcept(NS,'Question');
+        
         // Elements of the question concept is filled to add survey model
         var num;
         var length = surveyData.numOfQuestion;
         let arr = [];
+        var question = factory.newConcept(NS,'Question');
         for(num = 0; num < length; num++ )
-        {           
-            question.questionText = surveyData.questionText;
-            question.optionA = surveyData.newA;
-            question.optionB = surveyData.newB;
-            question.optionC = surveyData.newC;
-            question.optionD = surveyData.newD;
-            question.optionE = surveyData.newE;
+        {    
+            var question = factory.newConcept(NS,'Question');       
+            question.questionText = surveyData.questionArr[num].questionText;
+            question.optionA = surveyData.questionArr[num].optionA;
+            question.optionB = surveyData.questionArr[num].optionB;
+            question.optionC = surveyData.questionArr[num].optionC;
+            question.optionD = surveyData.questionArr[num].optionD;
+            question.optionE = surveyData.questionArr[num].optionE;
             question.votedA = 0;
             question.votedB = 0;
             question.votedC = 0;
@@ -47,17 +50,24 @@
             arr[num] = question;
         }   
         survey.questions = arr;
-        var route = factory.newConcept(NS,"Route");
+        
+        var event = factory.newEvent(NS, 'surveyCreated');
+        event.surveyId = surveyId;
+        emit(event);
+
+            // 4. Add to registry
+        return surveyRegistry.add(survey);
     });
 }
 
-import { emit } from "cluster";
+/*import { emit } from "cluster";
 
 /*
 * A script is written to define transactions in the blockchain
 * Used preimplemented set of functions to define transaction functions
 * Fabric Composer API *
 */
+/*
 function assignSurvey(SurveyParticipantData){
     var surveyRegistry = {}
     return getAssetRegistry("org.pollstar.survey.Survey").then(function(registry){
@@ -79,4 +89,4 @@ function assignSurvey(SurveyParticipantData){
     }).catch(function(error){
         throw new Error(error);
     });
-}
+}*/

@@ -1,7 +1,7 @@
 namespace org.pollstar.survey
 
 asset Survey identified by surveyId {
-  o String surveyId regex=/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9]/
+  o String surveyId 
   o Question[] questions
   o String[] voterIds
   o Integer numOfQuestion
@@ -22,13 +22,10 @@ concept Question  {
   o Integer votedE
 } 
 transaction createSurvey {
-  o String questionText
-  o String newA
-  o String newB
-  o String newC
-  o String newD
-  o String newE
+  o Question[] questionArr
   o Integer numOfQuestion
+  o String foundationId
+  o String surveyNum // It is for generating survey Id (Survey ID = foundationId + (number of survey fooundation done + 1))
 }
 event surveyCreated {
   o String surveyId
@@ -43,3 +40,5 @@ event surveyAssigned{
   o String surveyId
   o String participantId
 }
+
+// for test code : https://stackoverflow.com/questions/14234646/adding-elements-to-object/14234701
