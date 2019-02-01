@@ -1,0 +1,20 @@
+//Create Transactions
+
+* Create Survey 
+
+* Create Participant
+	-> Voter
+	-> Foundation
+	-> Admin
+
+* Create Item
+
+// Other Transactions
+
+* Vote Transaction
+
+* Give Coin Transaction (for voter)
+
+* Item Purchase Transaction (for voter)
+
+
