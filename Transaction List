@@ -1,4 +1,4 @@
-//Create Transactions
+// Create Transactions
 
 * Create Survey 
 
@@ -8,6 +8,9 @@
 	-> Admin
 
 * Create Item
+
+* Assign Survey
+	-> Participant
 
 // Other Transactions
 
