@@ -24,6 +24,10 @@ participant Foundation extends PollstarParticipant {
 participant Admin extends PollstarParticipant {
 
 }
+participant Voter extends PollstarParticipant
+{
+  o Double coin 
+}
 transaction createFoundation{
   o String userName
   o String email
@@ -37,9 +41,19 @@ transaction createAdmin {
   o String password
   o String address 
 }
+transaction createVoter {
+  o String userName
+  o String email
+  o String password
+  o String address
+  o String description 
+}
 event foundationCreated{
   o String participantId
 }
 event adminCreated{
+  o String participantId
+}
+event voterCreated{
   o String participantId
 }

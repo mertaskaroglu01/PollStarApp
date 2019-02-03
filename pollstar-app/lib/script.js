@@ -96,10 +96,10 @@ function createFoundation(foundationData){
                return foundationRegistry.add(foundation);
            }
            else{
-               throw new Error ("Username already exists!");
+               throw new Error ("Username already exists for foundation!");
            }
        });
-});
+    });
 }
 /**
 * Create Participant Transaction
@@ -128,21 +128,61 @@ function createAdmin(adminData){
                 signupValues.email = adminData.email;
                 admin.signupValues = signupValues;
                 var info = factory.newConcept(NS,'Info');
-                info.adress = foundationData.adress;
+                info.adress = adminData.adress;
                 admin.type = 1;
                 admin.Description = adminData.Description;
                 var event = factory.newEvent(NS, 'adminCreated');
                 event.participantId = participantId;
                 emit(event);
-                return adminRegistry.add(foundation);
+                return adminRegistry.add(admin);
             }
             else{
-                throw new Error ("Username already exists!");
+                throw new Error ("Username already exists for admin!");
             }
         });
- });
+    });
  }
+/**
+* Create Voter Transaction
+* @param {org.pollstar.participant.createVoter} createVoter
+* @transaction
+*/
 
+function createVoter(voterData){
+    return getParticipantRegistry('org.pollstar.participant.Voter')
+    .then(function(voterRegistry){
+        var  factory = getFactory();
+        return query('getFoundation',{username:voterData.userName})
+                    .then(function (results) 
+        {
+            
+        
+            if(results.length == 0)
+            {
+                var  NS =  'org.pollstar.participant';
+                var participantId = "";
+                participantId = voterData.userName;
+                var voter = factory.newResource(NS,'Voter',participantId);
+                var signupValues = factory.newConcept(NS,'SignupValues');
+                signupValues.userName = voterData.userName;
+                signupValues.password = voterData.password;
+                signupValues.email = voterData.email;
+                voter.signupValues = signupValues;
+                var info = factory.newConcept(NS,'Info');
+                info.adress = voterData.adress;
+                voter.type = 2;
+                voter.Description = voterData.Description;
+                var event = factory.newEvent(NS, 'voterCreated');
+                event.participantId = participantId;
+                emit(event);
+                return voterRegistry.add(voter);
+            }
+            else{
+                throw new Error ("Username already exists for voter!");
+            }
+        });
+    });
+ }
 /*import { emit } from "cluster";
 
 /*
