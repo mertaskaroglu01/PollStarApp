@@ -1,0 +1,6 @@
+query getFoundation {
+   description: "Returns all participant"
+   statement:  
+      SELECT  org.pollstar.participant.PollstarParticipant
+      WHERE (signupValues.userName == _$username)
+  } 

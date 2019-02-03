@@ -1,0 +1,33 @@
+namespace org.pollstar.participant
+
+participant PollstarParticipant identified by participantId {
+  o String participantId
+  o SignupValues signupValues optional
+  o Info info optional
+  o Integer type optional
+  o String Description optional
+}
+
+concept SignupValues {
+  o String email optional
+  o String password optional
+  o String userName optional
+}
+
+concept Info {
+    o String address optional
+}
+// Extended participant types
+
+
+transaction createFoundation{
+  o String userName
+  o String email
+  o String password
+  o Integer type
+  o String address
+}
+
+event foundationCreated{
+  o String participantId
+}
