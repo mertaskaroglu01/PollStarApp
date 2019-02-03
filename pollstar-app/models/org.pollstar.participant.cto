@@ -1,32 +1,45 @@
-namespace org.pollstar.market.participant
+namespace org.pollstar.participant
 
 participant PollstarParticipant identified by participantId {
   o String participantId
-  o SignupValues signupValues
-  o Info info
+  o SignupValues signupValues 
+  o Info info optional
+  o Integer type 
+  o String Description optional
 }
 
 concept SignupValues {
-  o String userName
-  o String email
-  o String password
+  o String email 
+  o String password 
+  o String userName 
 }
 
 concept Info {
-    o String address
+    o String address optional
 }
 // Extended participant types
-
-participant Voter extends PollstarParticipant {
-  o String fName
-  o String lName
-  o Double coin
-}
-
 participant Foundation extends PollstarParticipant {
-  o String Description
-  o Integer type
-}
-participant Administrator extends PollstarParticipant {
   
+}
+participant Admin extends PollstarParticipant {
+
+}
+transaction createFoundation{
+  o String userName
+  o String email
+  o String password
+  o String address
+  o String description optional
+}
+transaction createAdmin {
+  o String userName
+  o String email
+  o String password
+  o String address 
+}
+event foundationCreated{
+  o String participantId
+}
+event adminCreated{
+  o String participantId
 }

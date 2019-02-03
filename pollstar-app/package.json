@@ -1,12 +1,12 @@
 {
   "engines": {
-    "composer": "^0.19.19"
+    "composer": "^0.20.6"
   },
-  "name": "pollstar-app",
+  "name": "pollstar",
   "version": "0.0.1",
-  "description": "the data gathering app",
+  "description": "blockchain app that uses hyperledger fabric composer and its tools",
   "scripts": {
-    "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/pollstar-app.bna",
+    "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/pollstar.bna",
     "pretest": "npm run lint",
     "lint": "eslint .",
     "test": "nyc mocha -t 0 test/*.js && cucumber-js"
@@ -15,16 +15,16 @@
     "composer",
     "composer-network"
   ],
-  "author": "mert",
-  "email": "mertaskaroglu@hotmail.com",
-  "license": "Apache-2.0",
+  "author": "yagiz",
+  "email": "yagiz@bilkent.edu.tr",
+  "license": "Apache 2.0",
   "devDependencies": {
-    "composer-admin": "^0.19.19",
-    "composer-cli": "^0.19.19",
-    "composer-client": "^0.19.19",
-    "composer-common": "^0.19.19",
-    "composer-connector-embedded": "^0.19.19",
-    "composer-cucumber-steps": "^0.19.19",
+    "composer-admin": "^0.20.6",
+    "composer-cli": "^0.20.6",
+    "composer-client": "^0.20.6",
+    "composer-common": "^0.20.6",
+    "composer-connector-embedded": "^0.20.6",
+    "composer-cucumber-steps": "^0.20.6",
     "chai": "latest",
     "chai-as-promised": "latest",
     "cucumber": "^2.2.0",

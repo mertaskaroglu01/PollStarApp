@@ -13,52 +13,135 @@
  * 4. Add the flight asset to the registry
  */
  
- function createSurvey(surveyData)
- {
-    return getAssetRegistry('org.pollstar.survey.Survey')
-    .then(function(surveyRegistry){
-        
-        var  factory = getFactory();
+function createSurvey(surveyData)
+{
+   return getAssetRegistry('org.pollstar.survey.Survey')
+   .then(function(surveyRegistry){
+       
+       var  factory = getFactory();
 
-        var  NS =  'org.pollstar.survey';
+       var  NS =  'org.pollstar.survey';
 
-        var  surveyId = surveyData.foundationId + surveyData.surveyNum;
+       var  surveyId = surveyData.foundationId + surveyData.surveyNum;
 
-        var survey = factory.newResource(NS,'Survey',surveyId);
-        survey.numOfQuestion = surveyData.numOfQuestion;
-        survey.voterIds = [];
-        
-        // Elements of the question concept is filled to add survey model
-        var num;
-        var length = surveyData.numOfQuestion;
-        let arr = [];
-        var question = factory.newConcept(NS,'Question');
-        for(num = 0; num < length; num++ )
-        {    
-            var question = factory.newConcept(NS,'Question');       
-            question.questionText = surveyData.questionArr[num].questionText;
-            question.optionA = surveyData.questionArr[num].optionA;
-            question.optionB = surveyData.questionArr[num].optionB;
-            question.optionC = surveyData.questionArr[num].optionC;
-            question.optionD = surveyData.questionArr[num].optionD;
-            question.optionE = surveyData.questionArr[num].optionE;
-            question.votedA = 0;
-            question.votedB = 0;
-            question.votedC = 0;
-            question.votedD = 0;
-            question.votedE = 0;
-            arr[num] = question;
-        }   
-        survey.questions = arr;
-        
-        var event = factory.newEvent(NS, 'surveyCreated');
-        event.surveyId = surveyId;
-        emit(event);
+       var survey = factory.newResource(NS,'Survey',surveyId);
+       survey.numOfQuestion = surveyData.numOfQuestion;
+       survey.voterIds = [];
+       
+       // Elements of the question concept is filled to add survey model
+       var num;
+       var length = surveyData.numOfQuestion;
+       let arr = [];
+       
+       for(num = 0; num < length; num++ )
+       {    
+           var question = factory.newConcept(NS,'Question');       
+           question.questionText = surveyData.questionArr[num].questionText;
+           question.optionA = surveyData.questionArr[num].optionA;
+           question.optionB = surveyData.questionArr[num].optionB;
+           question.optionC = surveyData.questionArr[num].optionC;
+           question.optionD = surveyData.questionArr[num].optionD;
+           question.optionE = surveyData.questionArr[num].optionE;
+           question.votedA = 0;
+           question.votedB = 0;
+           question.votedC = 0;
+           question.votedD = 0;
+           question.votedE = 0;
+           arr[num] = question;
+       }   
+       survey.questions = arr;
+       
+       var event = factory.newEvent(NS, 'surveyCreated');
+       event.surveyId = surveyId;
+       emit(event);
 
-            // 4. Add to registry
-        return surveyRegistry.add(survey);
-    });
+           // 4. Add to registry
+       return surveyRegistry.add(survey);
+   });
 }
+
+/**
+* Create Participant Transaction
+* @param {org.pollstar.participant.createFoundation} createFoundation
+* @transaction
+*/
+
+function createFoundation(foundationData){
+   return getParticipantRegistry('org.pollstar.participant.Foundation')
+   .then(function(foundationRegistry){
+       var  factory = getFactory();
+       return query('getFoundation',{username:foundationData.userName})
+                   .then(function (results) 
+       {
+           
+       
+           if(results.length == 0)
+           {
+               var  NS =  'org.pollstar.participant';
+               var participantId = "";
+               participantId = foundationData.userName;
+               var foundation = factory.newResource(NS,'Foundation',participantId);
+               var signupValues = factory.newConcept(NS,'SignupValues');
+               signupValues.userName = foundationData.userName;
+               signupValues.password = foundationData.password;
+               signupValues.email = foundationData.email;
+               foundation.signupValues = signupValues;
+               var info = factory.newConcept(NS,'Info');
+               info.adress = foundationData.adress;
+               foundation.type = 0;
+               foundation.Description = foundationData.Description;
+               var event = factory.newEvent(NS, 'foundationCreated');
+               event.participantId = participantId;
+               emit(event);
+               return foundationRegistry.add(foundation);
+           }
+           else{
+               throw new Error ("Username already exists!");
+           }
+       });
+});
+}
+/**
+* Create Participant Transaction
+* @param {org.pollstar.participant.createAdmin} createAdmin
+* @transaction
+*/
+
+function createAdmin(adminData){
+    return getParticipantRegistry('org.pollstar.participant.Admin')
+    .then(function(adminRegistry){
+        var  factory = getFactory();
+        return query('getFoundation',{username:adminData.userName})
+                    .then(function (results) 
+        {
+            
+        
+            if(results.length == 0)
+            {
+                var  NS =  'org.pollstar.participant';
+                var participantId = "";
+                participantId = adminData.userName;
+                var admin = factory.newResource(NS,'Admin',participantId);
+                var signupValues = factory.newConcept(NS,'SignupValues');
+                signupValues.userName = adminData.userName;
+                signupValues.password = adminData.password;
+                signupValues.email = adminData.email;
+                admin.signupValues = signupValues;
+                var info = factory.newConcept(NS,'Info');
+                info.adress = foundationData.adress;
+                admin.type = 1;
+                admin.Description = adminData.Description;
+                var event = factory.newEvent(NS, 'adminCreated');
+                event.participantId = participantId;
+                emit(event);
+                return adminRegistry.add(foundation);
+            }
+            else{
+                throw new Error ("Username already exists!");
+            }
+        });
+ });
+ }
 
 /*import { emit } from "cluster";
 
@@ -69,24 +152,24 @@
 */
 /*
 function assignSurvey(SurveyParticipantData){
-    var surveyRegistry = {}
-    return getAssetRegistry("org.pollstar.survey.Survey").then(function(registry){
-        surveyRegistry = registry;
-        return surveyRegistry.get(SurveyParticipantData.surveyId);
-    }).then(function(survey){
-        if(!survey){
-            throw new Error("Survey: " + surveyId + " not found");
-            var factory = getFactory();
-            var relationship = factory.newRelationship("org.pollstar.survey", "Survey", SurveyParticipantData.participantId);
-            survey.participant = relationship;
-            return surveyRegistry.update(participant);
-        }
-    }).then(function(){
-        //Successful update 
-        var event = getFactory().newEvent("org.pollstar.survey", "survey assigned");
-        event.participantId = SurveyParticipantData.participantId;
-        emit(event);
-    }).catch(function(error){
-        throw new Error(error);
-    });
+   var surveyRegistry = {}
+   return getAssetRegistry("org.pollstar.survey.Survey").then(function(registry){
+       surveyRegistry = registry;
+       return surveyRegistry.get(SurveyParticipantData.surveyId);
+   }).then(function(survey){
+       if(!survey){
+           throw new Error("Survey: " + surveyId + " not found");
+           var factory = getFactory();
+           var relationship = factory.newRelationship("org.pollstar.survey", "Survey", SurveyParticipantData.participantId);
+           survey.participant = relationship;
+           return surveyRegistry.update(participant);
+       }
+   }).then(function(){
+       //Successful update 
+       var event = getFactory().newEvent("org.pollstar.survey", "survey assigned");
+       event.participantId = SurveyParticipantData.participantId;
+       emit(event);
+   }).catch(function(error){
+       throw new Error(error);
+   });
 }*/
