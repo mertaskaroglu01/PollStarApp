@@ -41,4 +41,14 @@ event surveyAssigned{
   o String participantId
 }
 
+transaction voteQuestion{
+  o String surveyId
+  o Integer questionIndex
+  o String votedOption
+}
+
+event questionVoted{
+  o String surveyId
+}
+
 // for test code : https://stackoverflow.com/questions/14234646/adding-elements-to-object/14234701

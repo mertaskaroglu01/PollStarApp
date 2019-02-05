@@ -208,5 +208,55 @@ function  assignSurvey(assignData){
     }).catch(function(error){
         throw new Error(error);
     });
+}
+
+/**
+* Assigns Survey to Participant
+* @param {org.pollstar.survey.voteQuestion} voteData
+* @transaction
+*/
+function voteQuestion(voteData){
+    var surveyReg = {};
+    return getAssetRegistry('org.pollstar.survey.Survey').then(function(registry){
+        surveyReg = registry
+        return surveyReg.get(voteData.surveyId);
+    }).then(function(survey){
+        if(!survey) throw new Error("Survey : "+voteData.surveyId," Not Found!!!");
+        if(votedData.votedOption == "A" )
+        {
+            survey.questions[voteData.questionIndex].votedA++;
+        }
+        
+        else if(votedData.votedOption == "B" )
+        {
+            survey.questions[voteData.questionIndex].votedB++;
+        }
+
+        else if(votedData.votedOption == "C" )
+        {
+            survey.questions[voteData.questionIndex].votedC++;
+        }
+
+        else if(votedData.votedOption == "D" )
+        {
+            survey.questions[voteData.questionIndex].votedD++;
+        }
+
+        else if(votedData.votedOption == "E" )
+        {
+            survey.questions[voteData.questionIndex].votedE++;
+        }
+        
+        return surveyReg.update(survey);
+
+    }).then(function(){
+        // Successful update
+        var event = getFactory().newEvent('org.pollstar.survey', 'questionVoted');
+        event.surveyId = voteData.surveyId;
+        emit(event);
+    }).catch(function(error){
+        throw new Error(error);
+    });
 
 }
+
