@@ -2,11 +2,11 @@
   "engines": {
     "composer": "^0.20.6"
   },
-  "name": "pollstar-v5",
+  "name": "pollstar-v6",
   "version": "0.0.1",
   "description": "blockchain app that uses hyperledger fabric composer and its tools",
   "scripts": {
-    "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/pollstar-v5.bna",
+    "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/pollstar-v6.bna",
     "pretest": "npm run lint",
     "lint": "eslint .",
     "test": "nyc mocha -t 0 test/*.js && cucumber-js"
