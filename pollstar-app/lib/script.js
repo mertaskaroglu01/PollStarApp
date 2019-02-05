@@ -111,7 +111,7 @@ function createAdmin(adminData){
     return getParticipantRegistry('org.pollstar.participant.Admin')
     .then(function(adminRegistry){
         var  factory = getFactory();
-        return query('getFoundation',{username:adminData.userName})
+        return query('getAdmin',{username:adminData.userName})
                     .then(function (results) 
         {
             
@@ -152,7 +152,7 @@ function createVoter(voterData){
     return getParticipantRegistry('org.pollstar.participant.Voter')
     .then(function(voterRegistry){
         var  factory = getFactory();
-        return query('getFoundation',{username:voterData.userName})
+        return query('getVoter',{username:voterData.userName})
                     .then(function (results) 
         {
             
@@ -163,6 +163,7 @@ function createVoter(voterData){
                 var participantId = "";
                 participantId = voterData.userName;
                 var voter = factory.newResource(NS,'Voter',participantId);
+                voter.coin = 0;
                 var signupValues = factory.newConcept(NS,'SignupValues');
                 signupValues.userName = voterData.userName;
                 signupValues.password = voterData.password;
@@ -183,33 +184,29 @@ function createVoter(voterData){
         });
     });
  }
-/*import { emit } from "cluster";
 
-/*
-* A script is written to define transactions in the blockchain
-* Used preimplemented set of functions to define transaction functions
-* Fabric Composer API *
+ /**
+* Assigns Survey to Participant
+* @param {org.pollstar.survey.assignSurvey} assignData
+* @transaction
 */
-/*
-function assignSurvey(SurveyParticipantData){
-   var surveyRegistry = {}
-   return getAssetRegistry("org.pollstar.survey.Survey").then(function(registry){
-       surveyRegistry = registry;
-       return surveyRegistry.get(SurveyParticipantData.surveyId);
-   }).then(function(survey){
-       if(!survey){
-           throw new Error("Survey: " + surveyId + " not found");
-           var factory = getFactory();
-           var relationship = factory.newRelationship("org.pollstar.survey", "Survey", SurveyParticipantData.participantId);
-           survey.participant = relationship;
-           return surveyRegistry.update(participant);
-       }
-   }).then(function(){
-       //Successful update 
-       var event = getFactory().newEvent("org.pollstar.survey", "survey assigned");
-       event.participantId = SurveyParticipantData.participantId;
-       emit(event);
-   }).catch(function(error){
-       throw new Error(error);
-   });
-}*/
+function  assignSurvey(assignData){
+    var surveyRegistry={}
+    return getAssetRegistry('org.pollstar.survey.Survey').then(function(registry){
+        surveyRegistry = registry
+        return surveyRegistry.get(assignData.surveyId);
+    }).then(function(survey){
+        if(!survey) throw new Error("Survey : "+assignData.surveyId," Not Found!!!");
+        survey.voterIds.push(assignData.participantId);
+        return surveyRegistry.update(survey);
+    }).then(function(){
+        // Successful update
+        var event = getFactory().newEvent('org.pollstar.survey', 'surveyAssigned');
+        event.surveyId = assignData.surveyId;
+        event.participantId = assignData.participantId;
+        emit(event);
+    }).catch(function(error){
+        throw new Error(error);
+    });
+
+}
