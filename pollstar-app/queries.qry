@@ -1,6 +1,21 @@
+
 query getFoundation {
    description: "Returns all participant"
    statement:  
-      SELECT  org.pollstar.participant.PollstarParticipant
+      SELECT  org.pollstar.participant.Foundation
       WHERE (signupValues.userName == _$username)
-  } 
+} 
+
+query getVoter{
+  description: "Returns selected voter"
+  statement:
+    SELECT  org.pollstar.participant.Voter
+      WHERE (signupValues.userName == _$username)
+} 
+
+query getAdmin{
+  description: "Returns selected admin"
+  statement:
+    SELECT  org.pollstar.participant.Admin
+      WHERE (signupValues.userName == _$username)
+} 
