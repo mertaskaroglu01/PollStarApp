@@ -215,6 +215,7 @@ function  assignSurvey(assignData){
 * @param {org.pollstar.survey.voteQuestion} voteData
 * @transaction
 */
+/*
 function voteQuestion(voteData){
     var surveyReg = {};
     return getAssetRegistry('org.pollstar.survey.Survey').then(function(registry){
@@ -222,27 +223,27 @@ function voteQuestion(voteData){
         return surveyReg.get(voteData.surveyId);
     }).then(function(survey){
         if(!survey) throw new Error("Survey : "+voteData.surveyId," Not Found!!!");
-        if(votedData.votedOption == "A" )
+        if(voteData.votedOption == "A" )
         {
             survey.questions[voteData.questionIndex].votedA++;
         }
         
-        else if(votedData.votedOption == "B" )
+        else if(voteData.votedOption == "B" )
         {
             survey.questions[voteData.questionIndex].votedB++;
         }
 
-        else if(votedData.votedOption == "C" )
+        else if(voteData.votedOption == "C" )
         {
             survey.questions[voteData.questionIndex].votedC++;
         }
 
-        else if(votedData.votedOption == "D" )
+        else if(voteData.votedOption == "D" )
         {
             survey.questions[voteData.questionIndex].votedD++;
         }
 
-        else if(votedData.votedOption == "E" )
+        else if(voteData.votedOption == "E" )
         {
             survey.questions[voteData.questionIndex].votedE++;
         }
@@ -257,6 +258,50 @@ function voteQuestion(voteData){
     }).catch(function(error){
         throw new Error(error);
     });
+}
+*/
 
+/**
+* Voter purchases Item from market
+* @param {org.pollstar.market.purchaseItem} itemData
+* @transaction
+*/
+/*
+function  purchaseItem(itemData){
+    var itemRegistry={}
+    var participantRegistry={}
+    return getAssetRegistry('org.pollstar.market.Market').then(function(registry){ 
+        //burası sorunlu ??? ....market.Item?
+        itemRegistry = registry
+        return itemRegistry.get(itemData.name);
+    }).then(function(item){
+        if(!item) throw new Error("Item : "+itemData.name," Not Found!!!");
+
+        if(item.price < getParticipant(itemData.participantId).coin)
+            itemData.participantId.coin -= item.price;        
+            
+        else if(item.price == getParticipant(itemData.participantId).coin)
+            itemData.participantId.coin = 0;
+        
+        item.owners.push(itemData.participantId); //add participantId into owners[] of Item   
+        return itemRegistry.update(item);     
+        
+    }).then(function(){
+        // Successful update
+        var event = getFactory().newEvent('org.pollstar.market', 'itemPurchased');
+        event.name = itemData.name;
+        event.participantId = itemData.participantId;
+        emit(event);
+    }).catch(function(error){
+        throw new Error(error);
+    });
 }
 
+function getParticipant(participantId){ //used to get the registry of a given voter Id
+    return getParticipantRegistry('org.pollstar.participant.Voter').then(function (participantReg) {
+        participantRegistry = participantReg;
+        return participantRegistry.get(participantId); 
+        //Return participant record of ther selected participant using get() function
+    });
+}
+*/
