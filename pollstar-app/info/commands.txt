@@ -1,3 +1,8 @@
+# Start server
+cd ~/fabric-dev-servers
+    export FABRIC_VERSION=hlfv12
+    ./startFabric.sh
+
 # Create the archive
 composer archive create  --sourceType dir --sourceName ../ -a archive.bna
 
@@ -5,7 +10,33 @@ composer archive create  --sourceType dir --sourceName ../ -a archive.bna
 composer network install -a ./archive.bna -c PeerAdmin@hlfv1
 
 # Strart the network
-composer network start -n pollstarnetwork -c PeerAdmin@hlfv1 -V 0.0.1 -A admin -S adminpw
+composer network start -n poll -c PeerAdmin@hlfv1 -V 0.0.1 -A admin -S adminpw
 
 # Use the card generated
-composer card import -f admin@pollstarnetwork.card
+composer card import -f admin@poll.card
+
+# To connect rest server type:
+yo hyperledger-composer
+
+# Output
+Welcome to the Hyperledger Composer project generator
+? Please select the type of project: LoopBack
+You can run this generator using: 'yo hyperledger-composer:loopback'
+Welcome to the Hyperledger Composer LoopBack project generator
+? Do you want to connect to a running Business Network? Yes
+? Project name: my-loopback-app
+? Description: Hyperledger Composer LoopBack project
+? Author name: Simon Stone
+? Author email: simon@congaverse.com
+? License: Apache-2.0
+? Name of the Business Network card: admin@tutorial-network
+
+# enter command: 
+npm start
+
+# Output
+> my-loopback-app@1.0.0 start /private/tmp/my-loopback-app
+> node .
+
+Web server listening at: http://localhost:3000
+Browse your REST API at http://localhost:3000/explorer
