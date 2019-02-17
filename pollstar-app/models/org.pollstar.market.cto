@@ -10,3 +10,4 @@ concept Item {
   o Integer price
   o String [] owners
 }
+

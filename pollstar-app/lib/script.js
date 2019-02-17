@@ -113,8 +113,7 @@ function createAdmin(adminData){
         var  factory = getFactory();
         return query('getAdmin',{username:adminData.userName})
                     .then(function (results) 
-        {
-            
+        {           
         
             if(results.length == 0)
             {
@@ -154,8 +153,7 @@ function createVoter(voterData){
         var  factory = getFactory();
         return query('getVoter',{username:voterData.userName})
                     .then(function (results) 
-        {
-            
+        {          
         
             if(results.length == 0)
             {
@@ -215,7 +213,7 @@ function  assignSurvey(assignData){
 * @param {org.pollstar.survey.voteQuestion} voteData
 * @transaction
 */
-/*
+
 function voteQuestion(voteData){
     var surveyReg = {};
     return getAssetRegistry('org.pollstar.survey.Survey').then(function(registry){
@@ -225,7 +223,7 @@ function voteQuestion(voteData){
         if(!survey) throw new Error("Survey : "+voteData.surveyId," Not Found!!!");
         if(voteData.votedOption == "A" )
         {
-            survey.questions[voteData.questionIndex].votedA++;
+            survey.questions[voteData.questionIndex].votedA ++;
         }
         
         else if(voteData.votedOption == "B" )
@@ -259,49 +257,47 @@ function voteQuestion(voteData){
         throw new Error(error);
     });
 }
-*/
+
 
 /**
 * Voter purchases Item from market
-* @param {org.pollstar.market.purchaseItem} itemData
+* @param {org.pollstar.participant.purchaseItem} itemData
 * @transaction
 */
-/*
-function  purchaseItem(itemData){
-    var itemRegistry={}
-    var participantRegistry={}
-    return getAssetRegistry('org.pollstar.market.Market').then(function(registry){ 
-        //burası sorunlu ??? ....market.Item?
-        itemRegistry = registry
-        return itemRegistry.get(itemData.name);
-    }).then(function(item){
-        if(!item) throw new Error("Item : "+itemData.name," Not Found!!!");
 
-        if(item.price < getParticipant(itemData.participantId).coin)
-            itemData.participantId.coin -= item.price;        
-            
-        else if(item.price == getParticipant(itemData.participantId).coin)
-            itemData.participantId.coin = 0;
-        
-        item.owners.push(itemData.participantId); //add participantId into owners[] of Item   
-        return itemRegistry.update(item);     
-        
+function  purchaseItem(itemData){
+    var participantRegistry={};
+    var marketRegistry={};
+    var parCoin = 0;
+    return getParticipantRegistry('org.pollstar.participant.Voter').then(function(registry){ 
+        participantRegistry = registry;
+        return participantRegistry.get(itemData.participantId);
+    }).then(function(participant){
+        parCoin = participant.coin;
+        if(parCoin < itemData.price) 
+            throw new Error("You have not enough coin :(");
+        else
+        {
+            participant.coin = participant.coin - itemData.price;
+        }
+        participantRegistry.update(participant); 
+        return getAssetRegistry('org.pollstar.market.Market')   
+    }).then(function(registry){
+        marketRegistry = registry;
+        return marketRegistry.get(itemData.marketId);
+    }).then(function(market){ 
+        market.items[itemData.itemIndex].owners.push(itemData.participantId);
+        marketRegistry.update(market);    
     }).then(function(){
         // Successful update
-        var event = getFactory().newEvent('org.pollstar.market', 'itemPurchased');
-        event.name = itemData.name;
+        var event = getFactory().newEvent('org.pollstar.participant', 'itemPurchased');
         event.participantId = itemData.participantId;
         emit(event);
     }).catch(function(error){
         throw new Error(error);
     });
+    
+    
 }
 
-function getParticipant(participantId){ //used to get the registry of a given voter Id
-    return getParticipantRegistry('org.pollstar.participant.Voter').then(function (participantReg) {
-        participantRegistry = participantReg;
-        return participantRegistry.get(participantId); 
-        //Return participant record of ther selected participant using get() function
-    });
-}
-*/
+

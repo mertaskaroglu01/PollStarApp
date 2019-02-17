@@ -48,6 +48,14 @@ transaction createVoter {
   o String address
   o String description 
 }
+
+transaction purchaseItem {
+  o String participantId
+  o Integer price
+  o Integer itemIndex
+  o String marketId
+}
+
 event foundationCreated{
   o String participantId
 }
@@ -55,5 +63,9 @@ event adminCreated{
   o String participantId
 }
 event voterCreated{
+  o String participantId
+}
+
+event itemPurchased{
   o String participantId
 }

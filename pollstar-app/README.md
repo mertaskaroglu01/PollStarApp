@@ -1,3 +1,3 @@
-# pollstar-v6
+# pollstar-bna
 
-blockchain app that uses hyperledger fabric composer and its tools
+pollstar app

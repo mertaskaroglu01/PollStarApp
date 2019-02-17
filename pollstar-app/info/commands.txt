@@ -10,10 +10,10 @@ composer archive create  --sourceType dir --sourceName ../ -a archive.bna
 composer network install -a ./archive.bna -c PeerAdmin@hlfv1
 
 # Strart the network
-composer network start -n poll -c PeerAdmin@hlfv1 -V 0.0.1 -A admin -S adminpw
+composer network start -n pollstar-bna -c PeerAdmin@hlfv1 -V 0.0.1 -A admin -S adminpw
 
 # Use the card generated
-composer card import -f admin@poll.card
+composer card import -f admin@pollstar-bna.card
 
 # To connect rest server type:
 yo hyperledger-composer
@@ -40,3 +40,24 @@ npm start
 
 Web server listening at: http://localhost:3000
 Browse your REST API at http://localhost:3000/explorer
+
+
+
+
+//Örnek deneme kodu
+
+{
+  "$class": "org.pollstar.survey.createSurvey",
+  "questionArr":[{"questionText":"Naber kanka","optionA":"evet","optionB":"EVET","optionC":"Hayir","optionD":"aharey","optionE":"SAJDKLA","votedA":1,"votedB":1,"votedC":1,"votedD":1,"votedE":2}],
+  "numOfQuestion": 1,
+  "foundationId": "mirgos",
+  "surveyNum": "1"
+}
+
+
+//Upgrade commentleri
+composer archive create -t dir -n ../
+composer network install -a pollstar-bna@0.0.5.bna -c PeerAdmin@hlfv1
+
+//chaincode eror fixer
+composer network start --card PeerAdmin@hlfv1 --networkAdmin admin --networkAdminEnrollSecret adminpw --archiveFile tutorial-network@0.0.1.bna --file networkadmin.card
