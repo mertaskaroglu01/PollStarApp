@@ -1,21 +1,15 @@
 // Create Transactions
-
 * Create Survey (done)
-
 * Create Participant (done)
 	-> Voter (done)
 	-> Foundation (done)
 	-> Admin (done)
-
 * Assign Survey (done) 
-
-
-// Other Transactions
-
 * Vote (done)
-
 * Give Coin Transaction (for voter)
-
 * Item Purchase (for voter) (done)
+
+***use passport in JSNode to secure rest server
+***implement application in android and connect to Rest API
 
 
